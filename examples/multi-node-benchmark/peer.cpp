@@ -186,7 +186,12 @@ bool Peer::publish(const string& message)
         return false;
        }
         
-    this->dc->send(message);
+	try {
+		this->dc->send(message);
+	} catch (const std::exception& e) {
+		cout << this.logId << " send failed: " << e.what() << endl;
+		this->bytesFailed += message.size();
+	}
     this->bytesOut += message.size();
     return true;
     }

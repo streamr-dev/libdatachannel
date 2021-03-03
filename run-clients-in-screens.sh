@@ -25,10 +25,11 @@ if [ -z "$WS_URL" ]
 fi
 
 
+ulimit -c unlimited
 mkdir -p logs
 for (( c=1; c<=$NUM; c++ ))
-do  
-   screen -S tsclient${c} -dm bash -c "WS_URL=${WSURL} npx ts-node client.ts ${NODE_ID_PREFIX}${c} &> logs/${NODE_ID_PREFIX}${c}.txt ; exec sh"
+do
+   screen -S client${c} -dm bash -c "WS_URL=${WSURL} ./build/examples/multi-node-benchmark/multi-node-benchmark &> logs/client${c}.txt ; exec sh"
 done
 
 screen -ls

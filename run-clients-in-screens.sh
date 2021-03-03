@@ -5,16 +5,9 @@ NODE_ID_PREFIX='client'
 
 if [ -z "$1" ]
   then
-    echo "No first argument given, using ${NODE_ID_PREFIX} as default node id prefix"
-  else
-    NODE_ID_PREFIX=$1
-fi
-
-if [ -z "$2" ]
-  then
     echo "No second argument given, running default of ${NUM} clients"
   else
-    NUM=$2
+    NUM=$1
 fi
 
 if [ -z "$WS_URL" ]

@@ -7,6 +7,7 @@
 
 #include "testclient.h"
 #include <nlohmann/json.hpp>
+#include <future>
 
 #include "peer.h"
 #include "helpers.h"

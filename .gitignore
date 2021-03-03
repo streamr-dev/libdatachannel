@@ -1,4 +1,6 @@
 build/
+xcode_build/
+examples/multi-node-benchmark/xcode_build/
 node_modules/
 *.d
 *.o

@@ -29,6 +29,8 @@
 
 int main(int argc, char **argv)
     {
+        cout << "Started at " << Helpers::now() << endl;
+    rtc::InitLogger(LogLevel::Verbose);
     string clientId = Helpers::randomString(8);
     if (argc == 2)
         {

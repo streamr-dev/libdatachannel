@@ -12,6 +12,8 @@
 #include "peer.h"
 #include "helpers.h"
 
+using namespace Helpers;
+
 using json = nlohmann::json;
 
 TestClient::TestClient() {}

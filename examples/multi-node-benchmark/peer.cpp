@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include "peer.h"
+#include "helpers.h"
+
+using namespace Helpers;
 
 Peer::Peer(string _selfId, string _peerId, shared_ptr<WebSocket> _signalingServerWs):
     selfId(_selfId), peerId(_peerId), signalingServerWs(_signalingServerWs)

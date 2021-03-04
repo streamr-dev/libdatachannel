@@ -25,7 +25,7 @@ void TestClient::start(const string& id, const string& wsUrl)
 
     ws->onOpen([&wsPromise]()
         {
-        cout << "Connected to signaling server; waiting for further messages from signaling server..." << endl;
+        cout << now() << "Connected to signaling server; waiting for further messages from signaling server..." << endl;
         wsPromise.set_value();
         });
 
@@ -33,7 +33,7 @@ void TestClient::start(const string& id, const string& wsUrl)
         {
         if (!holds_alternative<string>(data))
             {
-            cout << "Error: received websocket message that is not a string" << endl;
+            cout << now() << "Error: received websocket message that is not a string" << endl;
             return;
             }
                
@@ -42,7 +42,7 @@ void TestClient::start(const string& id, const string& wsUrl)
         auto it = message.find("type");
         if (it == message.end())
             {
-            cout << "Error: received websocket message has no type field" << endl;
+            cout << now() << "Error: received websocket message has no type field" << endl;
             return;
             }
         
@@ -53,7 +53,7 @@ void TestClient::start(const string& id, const string& wsUrl)
             auto it2 = message.find("target");
             if (it2 == message.end())
                 {
-                cout << "Error: received websocket connect message has no target field" << endl;
+                cout << now() << "Error: received websocket connect message has no target field" << endl;
                 return;
                 }
             string target = it2->get<string>();
@@ -69,17 +69,17 @@ void TestClient::start(const string& id, const string& wsUrl)
             auto it3 = message.find("from");
             if (it3 == message.end())
                 {
-                cout << "Error: received websocket relay message has no from field" << endl;
+                cout << now() << "Error: received websocket relay message has no from field" << endl;
                 return;
                 }
                 
             string from = it3->get<string>();
             
-            cout <<"Relay message received signaling server, from=" << from << endl;
+            cout << now() << "Relay message received signaling server, from=" << from << endl;
             
             if (connections->find(from) == connections->end())
                 {
-                cout << "Creating passive connection for " <<from <<endl;
+                cout << now() << "Creating passive connection for " <<from <<endl;
                 connections->emplace(from,  make_shared<Peer>(id, from, *ws));
                 connections->find(from)->second->startAsPassive();
                 }
@@ -87,7 +87,7 @@ void TestClient::start(const string& id, const string& wsUrl)
             auto it4 = message.find("data");
             if (it4 == message.end())
                 {
-                cout << "Error: received websocket relay message has no data field" << endl;
+                cout << now() << "Error: received websocket relay message has no data field" << endl;
                 return;
                 }
                 
@@ -96,7 +96,7 @@ void TestClient::start(const string& id, const string& wsUrl)
             }
         else
             {
-            cout << "Error: received websocket message had an unknown type: " << type << endl;
+            cout << now() << "Error: received websocket message had an unknown type: " << type << endl;
             return;
             }
        });
@@ -104,22 +104,22 @@ void TestClient::start(const string& id, const string& wsUrl)
         
     ws->onError([&wsPromise](string s)
         {
-        cout << "WebSocket error" << endl;
+        cout << now() << "WebSocket error" << endl;
         wsPromise.set_exception(std::make_exception_ptr(std::runtime_error(s)));
         });
 
     ws->onClosed([]()
         {
-        cout << "Connection lost to signaling server" << endl;
+        cout << now() << "Connection lost to signaling server" << endl;
         exit(1);
         });
         
     ws->open(wsUrl+"?id="+id);
 
-    cout << "Waiting for signaling to be connected..." << endl;
+    cout << now() << "Waiting for signaling to be connected..." << endl;
     wsFuture.get();
 
-    cout << "Starting sending loop" << endl;
+    cout << now() << "Starting sending loop" << endl;
         
         
         
@@ -171,7 +171,7 @@ void TestClient::printStatistics()
         conn->resetCounters();
         }
         
-        cout <<"Total " << Helpers::formatRate(totalIn) <<" / " << Helpers::formatRate(totalOut) << " kb/s (" << Helpers::formatRate(totalFailed) << "," << Helpers::formatRate(totalBufferedAmount) << ")" << endl;
+        cout << now() << "Total " << Helpers::formatRate(totalIn) <<" / " << Helpers::formatRate(totalOut) << " kb/s (" << Helpers::formatRate(totalFailed) << "," << Helpers::formatRate(totalBufferedAmount) << ")" << endl;
     }
     
     

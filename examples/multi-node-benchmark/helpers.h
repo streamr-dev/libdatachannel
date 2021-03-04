@@ -32,6 +32,12 @@ inline int formatRate(int bytes)
     return bytes / 1024;
     }
 
+inline string now()
+	{
+		auto now = std::chrono::system_clock::now();
+		return std::format("[{0:%F_%T}] ", now);
+	}
+
 }
 
 #endif /* helpers_h */

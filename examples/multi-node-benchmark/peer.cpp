@@ -20,7 +20,7 @@ Peer::Peer(string _selfId, string _peerId, shared_ptr<WebSocket> _signalingServe
         
     this->connection->onStateChange([this](PeerConnection::State state)
         {
-        cout << "State: " << state << endl;
+        cout << now() << "State: " << state << endl;
         this->lastState = state;
         });
     
@@ -59,23 +59,23 @@ void Peer::setUpDataChannel(shared_ptr<DataChannel> dc)
         
     dc->onOpen([logId = this->logId, peerId = this->peerId]()
         {
-        cout << logId << " DataChannel " << peerId << " open" << endl;
+        cout << now() << logId << " DataChannel " << peerId << " open" << endl;
         });
         
     dc->onClosed([logId = this->logId, peerId = this->peerId]()
         {
-        cout << logId << " DataChannel " << peerId << " closed" << endl;
+        cout << now() << logId << " DataChannel " << peerId << " closed" << endl;
         });
         
     dc->onError([logId = this->logId, peerId = this->peerId](string err)
         {
-        cout << logId << " DataChannel " << peerId << " error: "<< err << endl;
+        cout << now() << logId << " DataChannel " << peerId << " error: "<< err << endl;
         });
         
     dc->onBufferedAmountLow([obj = this, logId = this->logId, peerId = this->peerId, dc= this->dc] ()
         {
         obj->paused = false;
-        cout << logId << " DataChannel " << peerId << " LOW buffer " <<  dc->bufferedAmount()<< endl;
+        cout << now() << logId << " DataChannel " << peerId << " LOW buffer " <<  dc->bufferedAmount()<< endl;
         });
         
         
@@ -116,7 +116,7 @@ void Peer::startAsPassive()
         
     this->connection->onDataChannel([this](shared_ptr<DataChannel> dc)
         {
-        cout << "DataChannel received with label \"" << dc->label() << "\"" << endl;
+        cout << now() << "DataChannel received with label \"" << dc->label() << "\"" << endl;
 
         this->setUpDataChannel(dc);
         this->paused = false;
@@ -166,7 +166,7 @@ void Peer::handleRemoteData(json data)
         }
    else
         {
-        cout << this->logId << " unrecognized RTC message: " << data << endl;
+        cout << now() << this->logId << " unrecognized RTC message: " << data << endl;
         }
     }
 
@@ -181,7 +181,7 @@ bool Peer::publish(const string& message)
     if (this->dc->bufferedAmount() >= BUFFER_HIGH)
         {
         this->paused = true;
-        cout << this->logId << " DataChannel HIGH buffer " << this->dc->bufferedAmount() <<endl;
+        cout << now() << this->logId << " DataChannel HIGH buffer " << this->dc->bufferedAmount() <<endl;
         this->bytesFailed += message.size();
         return false;
        }
@@ -189,7 +189,7 @@ bool Peer::publish(const string& message)
 	try {
 		this->dc->send(message);
 	} catch (const std::exception& e) {
-		cout << this->logId << " send failed: " << e.what() << endl;
+		cout << now() << this->logId << " send failed: " << e.what() << endl;
 		this->bytesFailed += message.size();
 	}
     this->bytesOut += message.size();

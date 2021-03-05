@@ -58,6 +58,7 @@ Peer::Peer(string _selfId, string _peerId, shared_ptr<WebSocket> _signalingServe
 
 void Peer::setUpDataChannel(shared_ptr<DataChannel> dc)
     {
+    this->dc = dc;    
     dc->setBufferedAmountLowThreshold(BUFFER_LOW);
         
     dc->onOpen([logId = this->logId, peerId = this->peerId]()
@@ -89,8 +90,6 @@ void Peer::setUpDataChannel(shared_ptr<DataChannel> dc)
             obj->bytesIn += get<string>(msg).size();
             }
         });
-        
-    this->dc = dc;
     }
 
 void Peer::startAsActive()

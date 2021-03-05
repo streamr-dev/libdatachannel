@@ -85,8 +85,8 @@ void SctpTransport::Init() {
 	// Change congestion control from the default TCP Reno (RFC 2581) to H-TCP
 	usrsctp_sysctl_set_sctp_default_cc_module(SCTP_CC_HTCP);
 
-	// Enable Non-Renegable Selective Acknowledgments (NR-SACKs)
-	usrsctp_sysctl_set_sctp_nrsack_enable(1);
+	// Enable Partial Reliability Extension (RFC 3758)
+	usrsctp_sysctl_set_sctp_pr_enable(1);
 
 	// Increase the initial window size to 10 MTUs (RFC 6928)
 	usrsctp_sysctl_set_sctp_initial_cwnd(10);
